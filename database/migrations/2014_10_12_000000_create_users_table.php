@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
 
-            $table->string('role')->default('user');
+            $table->string('role')->default('admin');
             $table->bigInteger('saldo')->default(0);
             $table->boolean('is_banned')->default(false);
             $table->string('phone')->unique();

@@ -15,5 +15,6 @@ class VariansItemku extends Model
         'varian_nominal_value',
         'game_id',
         'varian_is_active',
+        'price'
     ];
 }

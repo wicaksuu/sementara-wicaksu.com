@@ -87,6 +87,7 @@ function delivery_order($headers, $order_id)
     $resp = curl_exec($curl);
     curl_close($curl);
     return $resp;
+    // return '';
 }
 
 function telegram($message)

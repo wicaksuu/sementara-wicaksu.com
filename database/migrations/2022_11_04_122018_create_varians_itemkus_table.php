@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('varians_itemkus', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('price');
             $table->bigInteger('varian_id');
             $table->string('varian_name');
             $table->string('varian_slug');

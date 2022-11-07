@@ -15,11 +15,13 @@ class ItemkuOrdersTable extends LivewireDatatable
     {
         if (Auth::user()->role == 'admin') {
             return ItemkuOrders::query()
+                ->orderBy('id', 'DESC')
                 ->where('user_id', Auth::user()->id)
                 ->where('modal', null)
                 ->join('users', 'itemku_orders.user_id', '=', 'users.id');
         } elseif ((Auth::user()->role == 'wickasu')) {
             return ItemkuOrders::query()
+                ->orderBy('id', 'DESC')
                 ->join('users', 'itemku_orders.user_id', '=', 'users.id');
         }
     }
@@ -27,6 +29,11 @@ class ItemkuOrdersTable extends LivewireDatatable
     public function columns()
     {
         return [
+
+            Column::name('id')
+                ->unsortable()
+                ->searchable(),
+
             Column::name('game_name')
                 ->unsortable()
                 ->searchable(),
