@@ -13,8 +13,17 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
 
                     @auth
-                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    <x-jet-nav-link href="{{ route('dashboard-'.Auth::user()->role) }}"
+                        :active="request()->routeIs('dashboard-'.Auth::user()->role)">
                         {{ __('Dashboard') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('varian-'.Auth::user()->role) }}"
+                        :active="request()->routeIs('varian-'.Auth::user()->role)">
+                        {{ __('Varian') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('store-'.Auth::user()->role) }}"
+                        :active="request()->routeIs('store-'.Auth::user()->role)">
+                        {{ __('Store') }}
                     </x-jet-nav-link>
                     @endauth
                     @stack('nav-left')
@@ -168,11 +177,12 @@
 
         <div class="pt-2 pb-3 space-y-1">
             @auth
-            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+            <x-jet-responsive-nav-link href="{{ route('dashboard-'.Auth::user()->role) }}"
+                :active="request()->routeIs('dashboard'.Auth::user()->role)">
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
             @endauth
-            
+
             @stack('nav-mobile')
             @if (!Auth::check())
             <x-jet-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">

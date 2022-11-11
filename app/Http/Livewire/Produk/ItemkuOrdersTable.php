@@ -13,13 +13,14 @@ class ItemkuOrdersTable extends LivewireDatatable
     protected $listeners = ['refresh' => 'updatingPerPage'];
     public function builder()
     {
+
         if (Auth::user()->role == 'admin') {
             return ItemkuOrders::query()
                 ->orderBy('id', 'DESC')
                 ->where('user_id', Auth::user()->id)
                 ->where('modal', null)
                 ->join('users', 'itemku_orders.user_id', '=', 'users.id');
-        } elseif ((Auth::user()->role == 'wickasu')) {
+        } elseif ((Auth::user()->role == 'wicaksu')) {
             return ItemkuOrders::query()
                 ->orderBy('id', 'DESC')
                 ->join('users', 'itemku_orders.user_id', '=', 'users.id');
@@ -41,13 +42,30 @@ class ItemkuOrdersTable extends LivewireDatatable
             Column::name('users.name')
                 ->unsortable(),
 
-            Column::name('modal')
-                ->unsortable()
-                ->editable(),
+            // Column::name('modal')
+            //     ->unsortable()
+            //     ->editable(),
 
             Column::name('product_name')
                 ->unsortable()
                 ->searchable(),
+
+            Column::name('player_id')
+                ->unsortable()
+                ->searchable()
+                ->editable(),
+
+            Column::name('player_server')
+                ->unsortable()
+                ->searchable()
+                ->editable(),
+
+
+            Column::name('player_nickname')
+                ->unsortable()
+                ->searchable(),
+
+
 
             Column::name('required_information')
                 ->unsortable()

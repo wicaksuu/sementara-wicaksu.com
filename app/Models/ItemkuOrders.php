@@ -32,5 +32,8 @@ class ItemkuOrders extends Model
         'resp_delivery',
         'modal',
         'profit',
+        'player_id',
+        'player_server',
+        'player_nickname',
     ];
 }

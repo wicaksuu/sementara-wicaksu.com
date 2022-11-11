@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ApiWicak;
 use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\Produk\Addbot;
+use App\Http\Livewire\Produk\Store;
+use App\Http\Livewire\Produk\Varian;
+use App\Http\Livewire\Store\Addvarian;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,5 +35,18 @@ Route::middleware([
     'verified',
     'role:admin'
 ])->group(function () {
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/dashboard-admin', Dashboard::class)->name('dashboard-admin');
+    Route::get('/varian-admin', Varian::class)->name('varian-admin');
+    Route::get('/store-admin', Store::class)->name('store-admin');
+    Route::get('/addbot/admin/{id}', Addbot::class)->name('addbot-admin');
+    Route::get('/addstore/varian/admin/{id}', Addvarian::class)->name('addstore-varian');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'role:wicaksu'
+])->group(function () {
+    Route::get('/dashboard-wicaksu', Dashboard::class)->name('dashboard-wicaksu');
 });

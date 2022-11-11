@@ -21,11 +21,15 @@ class GameTable extends LivewireDatatable
             NumberColumn::name('id')
                 ->label('ID'),
 
+            Column::name('game_id')
+                ->searchable(),
+
             Column::name('game_name')
                 ->searchable(),
 
             Column::name('game_slug')
                 ->searchable(),
+
             BooleanColumn::name('game_is_active')
 
 

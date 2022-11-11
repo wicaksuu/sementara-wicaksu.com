@@ -25,6 +25,9 @@ return new class extends Migration
             $table->bigInteger('buyer_price');
             $table->bigInteger('quantity');
             $table->string('required_information');
+            $table->string('player_id')->nullable();
+            $table->string('player_server')->nullable();
+            $table->string('player_nickname')->nullable();
             $table->string('seller_currency');
             $table->string('buyer_name');
             $table->integer('status');
