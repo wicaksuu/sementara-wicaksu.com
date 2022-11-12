@@ -30,6 +30,14 @@ class GlobalBotLogTable extends LivewireDatatable
                 'style' => 'success',
                 'message' => $respons,
             ]);
+        } elseif ($store->store_username != '') {
+            $token = login_bp($store->store_username, $store->store_password);
+            $respons  = bp_proses($store->store_url, str_replace(' ', '', $bot_log->store_data), $token);
+            BotLog::findOrFail($id)->update(["response" => $respons]);
+            $this->dispatchBrowserEvent('banner-message', [
+                'style' => 'success',
+                'message' => $respons,
+            ]);
         }
     }
 
@@ -115,4 +123,64 @@ function indonesia($headers, $base_url, $metod, $post)
     curl_close($curl);
 
     return  $resp;
+}
+
+// bp
+
+function curl($url,  $cookie, $headers = '', $data = '', $redirect = false)
+{
+    $headers[] = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.5195.102 Safari/537.36";
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie);
+    curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    if ($data != '') {
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    }
+    if ($redirect == true) {
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+    }
+    curl_setopt($curl, CURLOPT_ENCODING, '');
+    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 0);
+    curl_setopt($curl, CURLOPT_TIMEOUT, 60);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    $resp = curl_exec($curl);
+    curl_close($curl);
+    return $resp;
+}
+function get_string_between($string, $start, $end)
+{
+    $string = ' ' . $string;
+    $ini = strpos($string, $start);
+    if ($ini == 0) return '';
+    $ini += strlen($start);
+    $len = strpos($string, $end, $ini) - $ini;
+    return substr($string, $ini, $len);
+}
+function login_bp($user_name, $password)
+{
+    $token    = curl('https://bpgamestore.com/login', '../bp.txt', ['Host: bpgamestore.com']);
+    $token    = get_string_between($token, '<input type="hidden" name="_token" value="', '">');
+    $data     = "_token=$token&username=" . $user_name . "&password=" . $password;
+    $resp     = curl('https://bpgamestore.com/login', '../bp.txt', ['Host: bpgamestore.com'], $data);
+    $resp     = curl('https://bpgamestore.com/member', '../bp.txt', ['Host: bpgamestore.com']);
+    $token    = get_string_between($resp, '<meta name="csrf-token" content="', '">');
+    return $token;
+}
+
+function bp_proses($url, $post, $token)
+{
+    $headers = array(
+        "X-Csrf-Token: $token",
+        "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.5304.107 Safari/537.36",
+        "Accept: application/json, text/javascript, */*; q=0.01",
+        "Origin: https://bpgamestore.com",
+    );
+    $resp = curl($url, '../bp.txt', $headers, $post);
+    return $resp;
 }

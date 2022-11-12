@@ -36,25 +36,27 @@ class ApiOrderController extends Controller
                     foreach ($logic_bot as $raw) {
                         for ($i = 0; $i < $item->quantity; $i++) {
                             $store_varian = StoreVarian::where('id', $raw->store_varian_id)->first();
-                            $store        = Store::where('id', $store_varian->store_id)->first();
-                            $modal       = $modal + $store_varian->price;
-                            $bot[] = [
-                                'id' => $store_varian->id,
-                                'store_id' => $store_varian->store_id,
-                                'varian_name' => $store_varian->varian_name,
-                                'base_varian_id' => $store_varian->base_varian_id,
-                                'price' => $store_varian->price,
-                                'varian_id' => $raw->varian_id,
-                                'game_id' => $raw->game_id,
-                                'store_name' => $store->store_name,
-                                'store_url' => $store->store_url,
-                                'store_metod' => $store->store_metod,
-                                'store_header' => $store->store_header,
-                                'store_data' => str_replace('$server_id', $item->player_server, str_replace('$player_id', $item->player_id, str_replace('$product_id', $store_varian->base_varian_id, str_replace('$price', $store_varian->price, $store->store_data)))),
-                                'store_auth' => $store->store_auth,
-                                'store_username' => $store->store_username,
-                                'store_password' => $store->store_password,
-                            ];
+                            if ($store_varian != '') {
+                                $store        = Store::where('id', $store_varian->store_id)->first();
+                                $modal       = $modal + $store_varian->price;
+                                $bot[] = [
+                                    'id' => $store_varian->id,
+                                    'store_id' => $store_varian->store_id,
+                                    'varian_name' => $store_varian->varian_name,
+                                    'base_varian_id' => $store_varian->base_varian_id,
+                                    'price' => $store_varian->price,
+                                    'varian_id' => $raw->varian_id,
+                                    'game_id' => $raw->game_id,
+                                    'store_name' => $store->store_name,
+                                    'store_url' => $store->store_url,
+                                    'store_metod' => $store->store_metod,
+                                    'store_header' => $store->store_header,
+                                    'store_data' => str_replace('$server_id', $item->player_server, str_replace('$player_id', $item->player_id, str_replace('$product_id', $store_varian->base_varian_id, str_replace('$price', $store_varian->price, $store->store_data)))),
+                                    'store_auth' => $store->store_auth,
+                                    'store_username' => $store->store_username,
+                                    'store_password' => $store->store_password,
+                                ];
+                            }
                         }
                     }
                     $income = $item->seller_income - $modal;

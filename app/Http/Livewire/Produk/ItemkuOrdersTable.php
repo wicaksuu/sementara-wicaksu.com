@@ -51,6 +51,7 @@ class ItemkuOrdersTable extends LivewireDatatable
 
             Column::name('player_nickname')
                 ->unsortable()
+                ->searchable()
                 ->searchable(),
 
             Column::name('required_information')
@@ -72,6 +73,7 @@ class ItemkuOrdersTable extends LivewireDatatable
                 ->label('Bruto'),
 
             Column::name('product_id')
+                ->searchable()
                 ->unsortable(),
 
             Column::name('product_name')
