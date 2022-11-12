@@ -45,12 +45,36 @@ class ItemkuGetOrder extends Component
                         telegram($message);
                     }
                 }
-                $this->order = "Total Order Pending : " . $resp['data']['total_item'];
+                $dashboard = dashboard($headers);
+                $dashboard = json_decode($dashboard);
+
+                if (isset($dashboard->data)) {
+                    $waiting_for_seller = $dashboard->data->waiting_for_seller;
+                    $waiting_for_buyer  = $dashboard->data->waiting_for_buyer;
+                    $done               = $dashboard->data->done;
+                    $complained         = $dashboard->data->complained;
+                    $refunded           = $dashboard->data->refunded;
+                    $out_of_Stock       = $dashboard->data->out_of_Stock;
+                    $shop_balance       = rupiah($dashboard->data->shop_balance);
+                    $in_progress_transaction = $dashboard->data->in_progress_transaction;
+
+                    $this->order = "
+                    [W-Seller : $waiting_for_seller]
+                    [W-Seller : $waiting_for_buyer]
+                    [Done : $done]
+                    [Komplain : $complained]
+                    [Reff : $refunded]
+                    [Sold-Out : $out_of_Stock]
+                    [Saldo : $shop_balance]
+                    [Txr-berjalan : $in_progress_transaction] <br>" . date('H:i:s');
+                } else {
+                    $this->order = "Auth Ok " . date('H:i:s');
+                }
             } else {
-                $this->order = 'Mohon Login Ulang';
+                $this->order = 'Mohon Login Ulang ' . date('H:i:s');
             }
         } else {
-            $this->order = 'Mohon Login Ulang';
+            $this->order = 'Mohon Login Ulang ' . date('H:i:s');
         }
         return view('livewire.itemku-get-order');
     }
@@ -61,6 +85,30 @@ function rupiah($angka)
 
     $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
     return $hasil_rupiah;
+}
+
+function dashboard($headers)
+{
+    $url = "https://stunting.madiunkab.go.id/indonesia";
+    $data = json_encode([
+        "key" => 'Jack03061997',
+        'headers' => $headers,
+        'metod' => 'get',
+        'post' => '',
+        'url' => 'https://tokoku.itemku.com:81/dashboard',
+    ]);
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    $resp = curl_exec($curl);
+    curl_close($curl);
+
+    return  $resp;
 }
 
 function get_order($headers)

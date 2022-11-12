@@ -1,3 +1,3 @@
 <div wire:poll.keepalive>
-    {{ $order }}
+    {!! $order !!}
 </div>

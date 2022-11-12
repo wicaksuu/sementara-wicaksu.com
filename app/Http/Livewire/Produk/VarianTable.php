@@ -19,6 +19,7 @@ class VarianTable extends LivewireDatatable
 
     public function columns()
     {
+        $game_name = array();
         $games = ProduksItemku::all();
         foreach ($games as $game) {
             $game_name[] = $game->game_name;

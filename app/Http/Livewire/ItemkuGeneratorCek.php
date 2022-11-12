@@ -2,14 +2,12 @@
 
 namespace App\Http\Livewire;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\ItemkuOrders;
-use App\Models\ProduksItemku;
 use Livewire\Component;
 
 class ItemkuGeneratorCek extends Component
 {
-    public $balance = '';
+    public $time = '';
 
     public function render()
     {
@@ -19,12 +17,14 @@ class ItemkuGeneratorCek extends Component
             $catatan = $order->required_information;
             if (isset(json_decode($catatan)->player_id)) {
                 $game_id        = json_decode($catatan)->player_id;
-                $server_id      = json_decode($catatan)->player_zone_id;
+                $server_id      = json_decode($catatan)->zone_id;
                 $nick           = json_decode($catatan)->username;
                 $update_ml      = ['player_id' => $game_id, 'player_server' => $server_id, 'player_nickname' => $nick];
                 ItemkuOrders::whereId($id)->update($update_ml);
             }
         }
+
+        $this->time = '';
         return view('livewire.itemku-generator-cek');
     }
 }

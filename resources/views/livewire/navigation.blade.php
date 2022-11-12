@@ -25,6 +25,11 @@
                         :active="request()->routeIs('store-'.Auth::user()->role)">
                         {{ __('Store') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('global-log-'.Auth::user()->role) }}"
+                        :active="request()->routeIs('global-log-'.Auth::user()->role)">
+                        {{ __('Bot Log') }}
+                    </x-jet-nav-link>
+
                     @endauth
                     @stack('nav-left')
                 </div>

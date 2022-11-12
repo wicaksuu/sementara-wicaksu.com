@@ -22,6 +22,10 @@ class BotStoreTable extends LivewireDatatable
             Column::name('id')
                 ->unsortable()
                 ->searchable(),
+            Column::callback(['id', 'store_name'], function ($id, $name) {
+                return view('table-actions', ['id' => $id, 'name' => $name, 'action' => 'addstore-varian-admin']);
+            })->unsortable()
+                ->label('Action'),
             Column::name('store_name')
                 ->unsortable()
                 ->editable()
@@ -54,10 +58,6 @@ class BotStoreTable extends LivewireDatatable
                 ->unsortable()
                 ->editable()
                 ->searchable(),
-            Column::callback(['id', 'store_name'], function ($id, $name) {
-                return view('table-actions', ['id' => $id, 'name' => $name, 'action' => 'addstore-varian']);
-            })->unsortable()
-                ->label('Action')
         ];
     }
 }

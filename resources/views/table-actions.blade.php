@@ -9,6 +9,8 @@
         </svg>
     </a>
     @endif
+    @if (!isset($not_dell))
     @include('datatables::delete', ['value' => $id,'name' => $name])
+    @endif
 
 </div>

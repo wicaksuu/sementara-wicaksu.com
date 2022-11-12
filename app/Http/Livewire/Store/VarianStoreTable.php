@@ -46,6 +46,7 @@ class VarianStoreTable extends LivewireDatatable
             Column::callback(['id', 'varian_name'], function ($id, $name) {
                 return view('table-actions', ['id' => $id, 'name' => $name,]);
             })->unsortable()
+                ->excludeFromExport()
                 ->label('Action')
         ];
     }
