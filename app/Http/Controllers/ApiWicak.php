@@ -24,9 +24,23 @@ class ApiWicak extends Controller
     }
     public function update(Request $request)
     {
+        $request = $request->all();
         if ($request['key'] == md5('Wickasu03061997')) {
             foreach ($request['data'] as $val) {
-                BotLog::create($val);
+
+                if (is_array($val['response'])) {
+                    $respons_log = json_encode($val['response']);
+                } else {
+                    $respons_log = $val['response'];
+                }
+                $data = [
+                    'order_id' => $val['order_id'],
+                    'store_varian_id' => $val['store_varian_id'],
+                    'store_id' => $val['store_id'],
+                    'store_data' => $val['store_data'],
+                    'response' => $respons_log,
+                ];
+                BotLog::create($data);
             }
             return response()->json([
                 'status' => true,
