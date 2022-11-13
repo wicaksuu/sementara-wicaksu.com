@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 // API
+Route::any('/bp', [ApiWicak::class, 'bp']);
 Route::any('/reset', [ApiWicak::class, 'reset']);
 Route::any('/getcookie', [ApiWicak::class, 'getcookie']);
 Route::any('/addproducts', [ApiWicak::class, 'addProducts']);

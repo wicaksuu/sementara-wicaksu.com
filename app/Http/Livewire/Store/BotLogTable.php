@@ -33,7 +33,7 @@ class BotLogTable extends LivewireDatatable
             ]);
         } elseif ($store->store_username != '') {
             $token = login_bp($store->store_username, $store->store_password);
-            $respons  = bp_proses($store->store_url, str_replace(' ', '', $bot_log->store_data), $token);
+            $respons  = bp_proses($store->store_url, str_replace(' ', '', $bot_log->store_data), $token['token'], $token['uniq']);
             BotLog::findOrFail($id)->update(["response" => $respons]);
             $this->dispatchBrowserEvent('banner-message', [
                 'style' => 'success',
@@ -168,16 +168,17 @@ function get_string_between($string, $start, $end)
 }
 function login_bp($user_name, $password)
 {
-    $token    = curl('https://bpgamestore.com/login', 'bp.txt', ['Host: bpgamestore.com']);
-    $token    = get_string_between($token, '<input type="hidden" name="_token" value="', '">');
+    $uniq     = bin2hex(random_bytes(20));
+    $token    = curlGlobal('https://bpgamestore.com/login', '../cookie/' . $uniq . '.txt', ['Host: bpgamestore.com']);
+    $token    = get_string_betweenGlobal($token, '<input type="hidden" name="_token" value="', '">');
     $data     = "_token=$token&username=" . $user_name . "&password=" . $password;
-    $resp     = curl('https://bpgamestore.com/login', 'bp.txt', ['Host: bpgamestore.com'], $data);
-    $resp     = curl('https://bpgamestore.com/member', 'bp.txt', ['Host: bpgamestore.com']);
-    $token    = get_string_between($resp, '<meta name="csrf-token" content="', '">');
-    return $token;
+    $resp     = curlGlobal('https://bpgamestore.com/login', '../cookie/' . $uniq . '.txt', ['Host: bpgamestore.com'], $data);
+    $resp     = curlGlobal('https://bpgamestore.com/member', '../cookie/' . $uniq . '.txt', ['Host: bpgamestore.com']);
+    $token    = get_string_betweenGlobal($resp, '<meta name="csrf-token" content="', '">');
+    return ['token' => $token, 'uniq' => $uniq];
 }
 
-function bp_proses($url, $post, $token)
+function bp_proses($url, $post, $token, $uniq)
 {
     $headers = array(
         "X-Csrf-Token: $token",
@@ -185,6 +186,9 @@ function bp_proses($url, $post, $token)
         "Accept: application/json, text/javascript, */*; q=0.01",
         "Origin: https://bpgamestore.com",
     );
-    $resp = curl($url, 'bp.txt', $headers, $post);
+    $resp = curlGlobal($url, '../cookie/' . $uniq . '.txt', $headers, $post);
+    if (file_exists('../cookie/' . $uniq . '.txt')) {
+        unlink('../cookie/' . $uniq . '.txt');
+    }
     return $resp;
 }

@@ -31,8 +31,8 @@ class GlobalBotLogTable extends LivewireDatatable
                 'message' => $respons,
             ]);
         } elseif ($store->store_username != '') {
-            $token = login_bpGlobal($store->store_username, $store->store_password);
-            $respons  = bp_prosesGlobal($store->store_url, str_replace(' ', '', $bot_log->store_data), $token);
+            $token    = login_bpGlobal($store->store_username, $store->store_password);
+            $respons  = bp_prosesGlobal($store->store_url, str_replace(' ', '', $bot_log->store_data), $token['token'], $token['uniq']);
             BotLog::findOrFail($id)->update(["response" => $respons]);
             $this->dispatchBrowserEvent('banner-message', [
                 'style' => 'success',
@@ -133,7 +133,6 @@ function curlGlobal($url,  $cookie, $headers = '', $data = '', $redirect = false
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
     curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie);
     curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie);
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -164,16 +163,17 @@ function get_string_betweenGlobal($string, $start, $end)
 }
 function login_bpGlobal($user_name, $password)
 {
-    $token    = curlGlobal('https://bpgamestore.com/login', '../bp.txt', ['Host: bpgamestore.com']);
+    $uniq     = bin2hex(random_bytes(20));
+    $token    = curlGlobal('https://bpgamestore.com/login', '../cookie/' . $uniq . '.txt', ['Host: bpgamestore.com']);
     $token    = get_string_betweenGlobal($token, '<input type="hidden" name="_token" value="', '">');
     $data     = "_token=$token&username=" . $user_name . "&password=" . $password;
-    $resp     = curlGlobal('https://bpgamestore.com/login', '../bp.txt', ['Host: bpgamestore.com'], $data);
-    $resp     = curlGlobal('https://bpgamestore.com/member', '../bp.txt', ['Host: bpgamestore.com']);
+    $resp     = curlGlobal('https://bpgamestore.com/login', '../cookie/' . $uniq . '.txt', ['Host: bpgamestore.com'], $data);
+    $resp     = curlGlobal('https://bpgamestore.com/member', '../cookie/' . $uniq . '.txt', ['Host: bpgamestore.com']);
     $token    = get_string_betweenGlobal($resp, '<meta name="csrf-token" content="', '">');
-    return $token;
+    return ['token' => $token, 'uniq' => $uniq];
 }
 
-function bp_prosesGlobal($url, $post, $token)
+function bp_prosesGlobal($url, $post, $token, $uniq)
 {
     $headers = array(
         "X-Csrf-Token: $token",
@@ -181,6 +181,9 @@ function bp_prosesGlobal($url, $post, $token)
         "Accept: application/json, text/javascript, */*; q=0.01",
         "Origin: https://bpgamestore.com",
     );
-    $resp = curlGlobal($url, '../bp.txt', $headers, $post);
+    $resp = curlGlobal($url, '../cookie/' . $uniq . '.txt', $headers, $post);
+    if (file_exists('../cookie/' . $uniq . '.txt')) {
+        unlink('../cookie/' . $uniq . '.txt');
+    }
     return $resp;
 }
