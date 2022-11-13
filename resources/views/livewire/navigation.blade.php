@@ -186,6 +186,18 @@
                 :active="request()->routeIs('dashboard'.Auth::user()->role)">
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('varian-'.Auth::user()->role) }}"
+                :active="request()->routeIs('varian-'.Auth::user()->role)">
+                {{ __('Varian') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('store-'.Auth::user()->role) }}"
+                :active="request()->routeIs('store-'.Auth::user()->role)">
+                {{ __('Store') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('global-log-'.Auth::user()->role) }}"
+                :active="request()->routeIs('global-log-'.Auth::user()->role)">
+                {{ __('Bot Log') }}
+            </x-jet-responsive-nav-link>
             @endauth
 
             @stack('nav-mobile')

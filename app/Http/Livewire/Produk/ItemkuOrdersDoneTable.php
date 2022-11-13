@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
+use App\Models\ProduksItemku;
+
 
 class ItemkuOrdersDoneTable extends LivewireDatatable
 {
@@ -27,6 +29,11 @@ class ItemkuOrdersDoneTable extends LivewireDatatable
 
     public function columns()
     {
+        $game_name = array();
+        $games = ProduksItemku::all();
+        foreach ($games as $game) {
+            $game_name[] = $game->game_name;
+        }
         return [
 
             Column::callback(['id', 'order_number'], function ($id, $name) {
@@ -40,6 +47,7 @@ class ItemkuOrdersDoneTable extends LivewireDatatable
 
             Column::name('game_name')
                 ->unsortable()
+                ->filterable($game_name)
                 ->searchable(),
 
             Column::name('status')

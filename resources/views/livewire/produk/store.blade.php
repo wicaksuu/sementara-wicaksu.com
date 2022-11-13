@@ -93,9 +93,22 @@
         </div>
     </div>
 </div>
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="py-5 px-5">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-5">
+                    {{ __('Robot Combo') }}
+                </h2>
+                <livewire:combo-table hideable="select" exportable>
+            </div>
+        </div>
+    </div>
+</div>
 @push('scripts')
 <script>
     setInterval(()=>Livewire.emit('refreshStore'), 1000);
+    setInterval(()=>Livewire.emit('refreshcombo'), 1000);
 </script>
 
 

@@ -29,9 +29,3 @@
         </div>
     </div>
 </div>
-@push('scripts')
-<script>
-    setInterval(()=>Livewire.emit('refresh'), 1000);
-    setInterval(()=>Livewire.emit('refreshdone'), 1000);
-</script>
-@endpush

@@ -22,7 +22,7 @@
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="py-5 px-5">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-5">
-                    {{ __('Itemku Done Orders') }}
+                    {{ __('Itemku Robot Proses') }}
                 </h2>
                 <livewire:produk.itemku-orders-done-table hideable="select" exportable>
             </div>

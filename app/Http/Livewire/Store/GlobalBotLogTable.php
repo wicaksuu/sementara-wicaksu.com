@@ -24,15 +24,15 @@ class GlobalBotLogTable extends LivewireDatatable
             $base_url  = $store->store_url;
             $metod     = $store->store_metod;
             $post      = $bot_log->store_data;
-            $respons   =  indonesia($headers, $base_url, $metod, $post);
+            $respons   =  indonesiaGlobal($headers, $base_url, $metod, $post);
             BotLog::findOrFail($id)->update(["response" => $respons]);
             $this->dispatchBrowserEvent('banner-message', [
                 'style' => 'success',
                 'message' => $respons,
             ]);
         } elseif ($store->store_username != '') {
-            $token = login_bp($store->store_username, $store->store_password);
-            $respons  = bp_proses($store->store_url, str_replace(' ', '', $bot_log->store_data), $token);
+            $token = login_bpGlobal($store->store_username, $store->store_password);
+            $respons  = bp_prosesGlobal($store->store_url, str_replace(' ', '', $bot_log->store_data), $token);
             BotLog::findOrFail($id)->update(["response" => $respons]);
             $this->dispatchBrowserEvent('banner-message', [
                 'style' => 'success',
@@ -100,7 +100,7 @@ class GlobalBotLogTable extends LivewireDatatable
     }
 }
 
-function indonesia($headers, $base_url, $metod, $post)
+function indonesiaGlobal($headers, $base_url, $metod, $post)
 {
     $url = "https://stunting.madiunkab.go.id/indonesia";
     $data = json_encode([
@@ -127,7 +127,7 @@ function indonesia($headers, $base_url, $metod, $post)
 
 // bp
 
-function curl($url,  $cookie, $headers = '', $data = '', $redirect = false)
+function curlGlobal($url,  $cookie, $headers = '', $data = '', $redirect = false)
 {
     $headers[] = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.5195.102 Safari/537.36";
     $curl = curl_init($url);
@@ -153,7 +153,7 @@ function curl($url,  $cookie, $headers = '', $data = '', $redirect = false)
     curl_close($curl);
     return $resp;
 }
-function get_string_between($string, $start, $end)
+function get_string_betweenGlobal($string, $start, $end)
 {
     $string = ' ' . $string;
     $ini = strpos($string, $start);
@@ -162,18 +162,18 @@ function get_string_between($string, $start, $end)
     $len = strpos($string, $end, $ini) - $ini;
     return substr($string, $ini, $len);
 }
-function login_bp($user_name, $password)
+function login_bpGlobal($user_name, $password)
 {
-    $token    = curl('https://bpgamestore.com/login', '../bp.txt', ['Host: bpgamestore.com']);
-    $token    = get_string_between($token, '<input type="hidden" name="_token" value="', '">');
+    $token    = curlGlobal('https://bpgamestore.com/login', '../bp.txt', ['Host: bpgamestore.com']);
+    $token    = get_string_betweenGlobal($token, '<input type="hidden" name="_token" value="', '">');
     $data     = "_token=$token&username=" . $user_name . "&password=" . $password;
-    $resp     = curl('https://bpgamestore.com/login', '../bp.txt', ['Host: bpgamestore.com'], $data);
-    $resp     = curl('https://bpgamestore.com/member', '../bp.txt', ['Host: bpgamestore.com']);
-    $token    = get_string_between($resp, '<meta name="csrf-token" content="', '">');
+    $resp     = curlGlobal('https://bpgamestore.com/login', '../bp.txt', ['Host: bpgamestore.com'], $data);
+    $resp     = curlGlobal('https://bpgamestore.com/member', '../bp.txt', ['Host: bpgamestore.com']);
+    $token    = get_string_betweenGlobal($resp, '<meta name="csrf-token" content="', '">');
     return $token;
 }
 
-function bp_proses($url, $post, $token)
+function bp_prosesGlobal($url, $post, $token)
 {
     $headers = array(
         "X-Csrf-Token: $token",
@@ -181,6 +181,6 @@ function bp_proses($url, $post, $token)
         "Accept: application/json, text/javascript, */*; q=0.01",
         "Origin: https://bpgamestore.com",
     );
-    $resp = curl($url, '../bp.txt', $headers, $post);
+    $resp = curlGlobal($url, '../bp.txt', $headers, $post);
     return $resp;
 }
