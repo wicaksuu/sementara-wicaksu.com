@@ -24,7 +24,6 @@ class ApiWicak extends Controller
     }
     public function update(Request $request)
     {
-        $request = $request->all();
         if ($request['key'] == md5('Wickasu03061997')) {
             foreach ($request['data'] as $val) {
                 BotLog::create($val);

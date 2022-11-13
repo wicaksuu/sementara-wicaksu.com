@@ -50,6 +50,7 @@ class VarianTable extends LivewireDatatable
 
             Column::name('price')
                 ->unsortable()
+                ->editable()
                 ->searchable(),
 
             BooleanColumn::name('varian_is_active')
