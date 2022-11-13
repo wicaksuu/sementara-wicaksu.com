@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('varian_name')->nullable();
             $table->string('base_varian_id')->nullable();
             $table->bigInteger('price')->nullable();
+            $table->string('discount')->nullable();
             $table->timestamps();
         });
     }

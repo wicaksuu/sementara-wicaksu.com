@@ -42,6 +42,12 @@
                                 wire:model="price" autofocus x-ref="price" autocomplete="one-time-price" />
                             <x-jet-input-error for="price" class="mt-2" />
                         </div>
+                        <div class="mt-2">
+                            <x-jet-label for="discount" value="{{ __('Discount') }}" />
+                            <x-jet-input id="discount" class="block mt-1 w-full" type="text" inputmode="text"
+                                wire:model="discount" autofocus x-ref="discount" autocomplete="one-time-discount" />
+                            <x-jet-input-error for="discount" class="mt-2" />
+                        </div>
                     </x-slot>
 
                     <x-slot name="footer">
@@ -62,7 +68,7 @@
 </div>
 @push('scripts')
 <script>
-    setInterval(()=>Livewire.emit('refreshStoreVarian'), 1000);
+    setInterval(()=>Livewire.emit('refreshStoreVarian'), 2000);
 </script>
 
 

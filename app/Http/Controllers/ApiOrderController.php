@@ -37,6 +37,11 @@ class ApiOrderController extends Controller
                         for ($i = 0; $i < $item->quantity; $i++) {
                             $store_varian = StoreVarian::where('id', $raw->store_varian_id)->first();
                             if ($store_varian != '') {
+                                if ($store_varian->discount != '') {
+                                    $dc = floor($store_varian->discount * $store_varian->price / 100);
+                                } else {
+                                    $dc = '';
+                                }
                                 $store        = Store::where('id', $store_varian->store_id)->first();
                                 $modal       = $modal + $store_varian->price;
                                 $bot[] = [
@@ -51,7 +56,7 @@ class ApiOrderController extends Controller
                                     'store_url' => $store->store_url,
                                     'store_metod' => $store->store_metod,
                                     'store_header' => $store->store_header,
-                                    'store_data' => str_replace('$server_id', $item->player_server, str_replace('$player_id', $item->player_id, str_replace('$product_id', $store_varian->base_varian_id, str_replace('$price', $store_varian->price, $store->store_data)))),
+                                    'store_data' => str_replace('$discount',$dc,str_replace('$server_id', $item->player_server, str_replace('$player_id', $item->player_id, str_replace('$product_id', $store_varian->base_varian_id, str_replace('$price', $store_varian->price, $store->store_data))))),
                                     'store_auth' => $store->store_auth,
                                     'store_username' => $store->store_username,
                                     'store_password' => $store->store_password,

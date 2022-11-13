@@ -13,6 +13,7 @@ class StoreVarian extends Model
         'store_id',
         'varian_name',
         'base_varian_id',
-        'price'
+        'price',
+        'discount'
     ];
 }

@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Addvarian extends Component
 {
-    public $varian_name, $base_varian_id, $price;
+    public $varian_name, $base_varian_id, $price, $discount;
     public $isModalOpen = 0;
     public $store;
 
@@ -36,6 +36,7 @@ class Addvarian extends Component
         $this->varian_name = '';
         $this->base_varian_id = '';
         $this->price = '';
+        $this->discount = '';
     }
 
     public function store()
@@ -44,6 +45,7 @@ class Addvarian extends Component
             'varian_name' => 'required',
             'base_varian_id' => 'required',
             'price' => 'required',
+            'discount' => 'required',
         ]);
         try {
             StoreVarian::create([
@@ -51,6 +53,7 @@ class Addvarian extends Component
                 'varian_name' => $this->varian_name,
                 'base_varian_id' => $this->base_varian_id,
                 'price' => $this->price,
+                'discount' => $this->discount,
             ]);
             $this->dispatchBrowserEvent('banner-message', [
                 'style' => 'success',
