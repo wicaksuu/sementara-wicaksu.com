@@ -39,6 +39,7 @@ class VarianStoreTable extends LivewireDatatable
             Column::name('base_varian_id')
                 ->editable()
                 ->searchable(),
+                
             Column::name('price')
                 ->editable()
                 ->searchable(),

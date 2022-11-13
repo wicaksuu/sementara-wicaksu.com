@@ -45,9 +45,10 @@
                         </x-slot>
                     </x-jet-dialog-modal>
 
-
-
                 </h2>
+
+                @livewire('warning-laba-varian',['varian'=>$varian])
+
                 @livewire('produk.bot-logic-table',['exportable'=>true,'varian'=>$varian])
             </div>
         </div>

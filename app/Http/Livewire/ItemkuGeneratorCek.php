@@ -11,7 +11,8 @@ class ItemkuGeneratorCek extends Component
 
     public function render()
     {
-        $daftar_order = ItemkuOrders::whereNull('player_id')->get();
+        $daftar_order = ItemkuOrders::whereNull('player_id')
+            ->get();
         foreach ($daftar_order as $order) {
             $id = $order->id;
             $catatan = $order->required_information;

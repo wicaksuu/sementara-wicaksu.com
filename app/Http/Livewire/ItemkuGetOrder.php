@@ -14,7 +14,10 @@ class ItemkuGetOrder extends Component
 
     public function render()
     {
-        $orders = ItemkuOrders::where('user_id', Auth::user()->id)->whereNotNull('modal')->where('profit', null)->get();
+        $orders = ItemkuOrders::where('user_id', Auth::user()->id)
+            ->whereNotNull('modal')
+            ->where('profit', null)
+            ->get();
 
         foreach ($orders as $value) {
             $modals = $value->modal * $value->quantity;
